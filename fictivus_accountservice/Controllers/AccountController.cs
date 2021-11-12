@@ -101,7 +101,7 @@ namespace fictivus_accountservice.Controllers
                 Account account = new Account();
                 account.Username = registerDTO.Username;
                 account.Password = Encryptor.EncryptPassword(registerDTO.Password);
-                account.EmailAdress = registerDTO.EmailAdress;
+                account.EmailAdress = Encryptor.EncryptEmail(registerDTO.EmailAdress);
                 if (_context.Accounts.Any(o => o.Username == account.Username) || _context.Accounts.Any(o => o.EmailAdress == account.EmailAdress))
                 {
                     return Json(new RegisterResponseDTO("FOUT! de gebruikersnaam of het emailadress is in gebruik."));
@@ -117,6 +117,11 @@ namespace fictivus_accountservice.Controllers
             return Json(new RegisterResponseDTO("FOUT! De ingevoerde gegevens voldoen niet aan de eisen."));
         }
 
+        //implementeer eventueel wachtwoord vergeten methode hier
+        //
+        //
+        //
+        //
 
         public static bool ValidateEmail(string email)
         {

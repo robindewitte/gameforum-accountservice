@@ -17,5 +17,16 @@ namespace fictivus_accountservice.Encryption
         {
             return BCrypt.Net.BCrypt.Verify(originalPassword, storedPassword);
         }
+
+        public static string EncryptEmail(string email)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(email, BCrypt.Net.BCrypt.GenerateSalt());
+        }
+
+        public static bool ValidateEmail(string originalEmail, string storedEmail)
+        {
+            return BCrypt.Net.BCrypt.Verify(originalEmail, storedEmail);
+        }
+
     }
 }

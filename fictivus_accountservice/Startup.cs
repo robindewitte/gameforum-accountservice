@@ -1,7 +1,9 @@
+using fictivus_accountservice.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,6 +34,9 @@ namespace fictivus_accountservice
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "fictivus_accountservice", Version = "v1" });
             });
+            var connection = Configuration.GetConnectionString("AccountContext");
+            services.AddDbContext<AccountContext>(options =>
+           options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
