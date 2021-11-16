@@ -1,10 +1,14 @@
 using fictivus_accountservice;
 using fictivus_accountservice.Controllers;
+using fictivus_accountservice.DTO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace accountservicetest
@@ -68,6 +72,24 @@ namespace accountservicetest
             bool result = AccountController.ValidatePassword("L0ngenoughw!thsigns");
 
             Assert.True(result);
+        }
+
+        [Fact]
+        public async Task ValidateCall()
+        {
+            LoginDTO loginDTO = new LoginDTO("robintest", "V!rkeerd1234");
+            var loginDTOstring = new StringContent(JsonConvert.SerializeObject(loginDTO), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync("https://localhost:5003/api/user/login", loginDTOstring);
+            var responseString = await response.Content.ReadAsStringAsync();
+            Assert.NotEqual("verkeerd", responseString);
+
+            loginDTO = new LoginDTO("robintest", "ditmoetfalen");
+            loginDTOstring = new StringContent(JsonConvert.SerializeObject(loginDTO), Encoding.UTF8, "application/json");
+            response = await _client.PostAsync("https://localhost:5003/api/user/login", loginDTOstring);
+            responseString = await response.Content.ReadAsStringAsync();
+            Assert.Equal("Verkeerd", responseString);
+
+
         }
     }
 }
