@@ -34,14 +34,18 @@ namespace accountservicetest
                }));
             _client = _server.CreateClient();
         }
+
         [Theory]
         [InlineData("ikdoemaarwat")]
         [InlineData("ikdoemaarwat@ergens,net")]
         [InlineData("ikdoemaarwatergens.net")]
-        public void ValidateEmailReturnFalse(string value)
+        public void ValidateEmail_WrongEmailConventions_ReturnFalse(string value)
         {
+            //arrange above
+            //act
             bool result = AccountController.ValidateEmail(value);
 
+            //assert
             Assert.False(result);
         }
 
@@ -51,45 +55,63 @@ namespace accountservicetest
         [InlineData("longenoughnosigns")]
         [InlineData("Longenoughnosigns")]
         [InlineData("L0ngenoughnosigns")]
-        public void ValidatePwReturnFalse(string value)
+        public void ValidatePw_WrongPwConventions_ReturnFalse(string value)
         {
+            //arrange above
+            //act
             bool result = AccountController.ValidatePassword(value);
 
+            //assert
             Assert.False(result);
         }
 
         [Fact]
-        public void ValidateEmailReturnTrue()
+        public void ValidateEmail_RightEmailConventions_ReturnTrue()
         {
+            //arrange and act
             bool result = AccountController.ValidateEmail("ikdoemaarwat@ergens.net");
 
+            //assert
             Assert.True(result);
         }
 
         [Fact]
-        public void ValidatePwReturnTrue()
+        public void ValidatePw_RightPwConventions_ReturnTrue()
         {
+            //arrange and act
             bool result = AccountController.ValidatePassword("L0ngenoughw!thsigns");
 
+            //assert
             Assert.True(result);
         }
 
         [Fact]
-        public async Task ValidateCall()
+        public async Task ValidateLogin_WrongCredentials_False()
         {
-            LoginDTO loginDTO = new LoginDTO("robintest", "V!rkeerd1234");
+            //arrange
+            LoginDTO loginDTO = new LoginDTO("robintest", "ditmoetfalen");
             var loginDTOstring = new StringContent(JsonConvert.SerializeObject(loginDTO), Encoding.UTF8, "application/json");
+
+            //act
             var response = await _client.PostAsync("https://localhost:5003/api/user/login", loginDTOstring);
             var responseString = await response.Content.ReadAsStringAsync();
-            Assert.NotEqual("verkeerd", responseString);
-
-            loginDTO = new LoginDTO("robintest", "ditmoetfalen");
-            loginDTOstring = new StringContent(JsonConvert.SerializeObject(loginDTO), Encoding.UTF8, "application/json");
-            response = await _client.PostAsync("https://localhost:5003/api/user/login", loginDTOstring);
-            responseString = await response.Content.ReadAsStringAsync();
+            //assert
             Assert.Equal("Verkeerd", responseString);
-
-
         }
+
+/*
+        [Fact]
+        public async Task ValidateLogin_RightCredentials_True()
+        {
+            //arrange
+            LoginDTO loginDTO = new LoginDTO("robintest", "V!rkeerd1234");
+            var loginDTOstring = new StringContent(JsonConvert.SerializeObject(loginDTO), Encoding.UTF8, "application/json");
+            //act
+            var response = await _client.PostAsync("https://localhost:5003/api/user/login", loginDTOstring);
+            var responseString = await response.Content.ReadAsStringAsync();
+            //assert
+            Assert.NotEqual("verkeerd", responseString);
+        }
+*/
     }
 }
