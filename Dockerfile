@@ -6,8 +6,8 @@ EXPOSE 5004
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["fictivus_accountservice.csproj", "."]
-RUN dotnet restore "./fictivus_accountservice.csproj"
+COPY ["fictivus_accountservice/fictivus_accountservice.csproj", "."]
+RUN dotnet restore "fictivus_accountservice/fictivus_accountservice.csproj"
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build "fictivus_accountservice/fictivus_accountservice.csproj" -c Release -o /app/build
