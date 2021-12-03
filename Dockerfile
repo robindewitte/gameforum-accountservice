@@ -10,7 +10,7 @@ COPY ["fictivus_accountservice/fictivusforum_accountservice.csproj", "fictivus_a
 RUN dotnet restore "fictivus_accountservice/fictivusforum_accountservice.csproj"
 COPY . .
 WORKDIR "/src/fictivus_accountservice"
-RUN dotnet build "fictivus_accountservice/fictivusforum_accountservice.csproj" -c Release -o /app/build
+RUN dotnet build "fictivusforum_accountservice.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "fictivusforum_accountservice.csproj" -c Release -o /app/publish
