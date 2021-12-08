@@ -5,17 +5,17 @@ WORKDIR /app
 EXPOSE 5004
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-WORKDIR /src
+WORKDIR /src/fictivus_accountservice
 COPY ["fictivus_accountservice/fictivusforum_accountservice.csproj", "fictivus_accountservice/"]
 RUN dotnet restore "fictivus_accountservice/fictivusforum_accountservice.csproj"
 COPY . .
 WORKDIR "/src/fictivus_accountservice"
-RUN dotnet build "fictivusforum_accountservice.csproj" -c Release -o /app/build
+RUN dotnet build "fictivus_accountservice/fictivusforum_accountservice.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "fictivusforum_accountservice.csproj" -c Release -o /app/publish
+RUN dotnet publish "fictivus_accountservice/fictivusforum_accountservice.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "fictivus_accountservice.dll"]
+ENTRYPOINT ["dotnet", "fictivusforum_accountservice.dll"]
