@@ -52,6 +52,7 @@ namespace fictivus_accountservice
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
